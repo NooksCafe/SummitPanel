@@ -1,0 +1,67 @@
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Development Announcement Panel</title>
+          </head>
+          <body>
+              <h1>Development Announcement Panel</h1>
+              <form id="messageForm">
+                  <label for="embedTitle">Embed Title:</label><br>
+                  <input type="text" id="embedTitle" name="embedTitle" required><br>
+                  <label for="message">Message:</label><br>
+                  <textarea id="message" name="message" rows="4" cols="50" required></textarea><br>
+                  <label for="pingRoleId">Role to Ping (Role ID):</label><br>
+                  <input type="text" id="pingRoleId" name="pingRoleId"><br>
+                  <input type="submit" value="Send Message">
+              </form>
+
+              <script>
+                  document.getElementById('messageForm').addEventListener('submit', function(event) {
+                      event.preventDefault(); // Prevent form submission
+
+                      // Retrieve embed title, message, and role ID to ping from form inputs
+                      var embedTitle = document.getElementById('embedTitle').value;
+                      var message = document.getElementById('message').value;
+                      var pingRoleId = document.getElementById('pingRoleId').value;
+
+                      // Hardcoded webhook URL
+                      var webhookUrl = 'https://discord.com/api/webhooks/1230367911940718682/8TviDb_ocwWEIRAZPEBaibTKh3Hn0aeb3FTUc1vGkc64OAuNWhXGgN1PfSARukMmss9w';
+
+                      // Create payload for webhook request (embed message with mention)
+                      var payload = {
+                          embeds: [{
+                              title: embedTitle,
+                              description: message,
+                              color: parseInt('ADD8E6', 16) // Convert hexadecimal color code to decimal
+                          }],
+                          content: pingRoleId ? ' <@&' + pingRoleId + '>' : '' // Include role mention if role ID is provided
+                      };
+
+                      // Send POST request to webhook URL
+                      fetch(webhookUrl, {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify(payload)
+                      })
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error('Failed to send message.');
+                          }
+                          console.log('Message sent successfully!');
+                      })
+                      .catch(error => {
+                          console.error('Error:', error);
+                      });
+                  });
+              </script>
+            <p>Development Ping Role ID: 1230279777869365268</p>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <!-- Add more links as needed for other webhook-related actions -->
+            </ul>
+          </body>
+          </html>
